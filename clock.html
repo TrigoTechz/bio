@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bold Green Digital Clock</title>
+  <title>Centered Digital Clock</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap">
   <style>
     body {
@@ -14,7 +14,8 @@
       height: 100vh;
       margin: 0;
       background-color: #191919; /* DM Default Background */
-      color: #28a745; /* Green Color */
+      color: #28a745; /* Green Text Color */
+      overflow: hidden; /* Prevent scrolling */
     }
 
     #clock {
@@ -22,7 +23,7 @@
     }
 
     #time {
-      font-size: 120px; /* Bigger Size */
+      font-size: 80px; /* Slightly smaller font size */
       font-weight: bold; /* Bold Text */
       color: #28a745; /* Green Text */
       display: inline-block;
@@ -30,14 +31,37 @@
     }
 
     #am-pm {
-      font-size: 24px; /* Smaller Size for AM/PM */
+      font-size: 20px; /* Smaller size for AM/PM */
       font-weight: bold; /* Bold Text */
       color: #28a745; /* Green Text */
       position: absolute;
-      right: -50px;
-      top: 20px;
+      right: -40px; /* Adjusted to align with the time */
+      top: 15px; /* Adjusted positioning */
     }
 
+    @media (max-width: 768px) {
+      #time {
+        font-size: 60px; /* Adjust font size for smaller screens */
+      }
+
+      #am-pm {
+        font-size: 16px; /* Adjust AM/PM size for smaller screens */
+        right: -30px; /* Adjust right position */
+        top: 10px; /* Adjust top position */
+      }
+    }
+
+    @media (max-width: 480px) {
+      #time {
+        font-size: 40px; /* Further adjust for very small screens */
+      }
+
+      #am-pm {
+        font-size: 12px;
+        right: -20px;
+        top: 8px;
+      }
+    }
   </style>
 </head>
 <body>
