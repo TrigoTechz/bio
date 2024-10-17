@@ -6,16 +6,21 @@
   <title>Centered Digital Clock</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap">
   <style>
+    /* Ensure no scrollbars appear */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* Disable scrolling */
+    }
+
     body {
       font-family: 'Karla', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
       background-color: #191919; /* DM Default Background */
       color: #28a745; /* Green Text Color */
-      overflow: hidden; /* Prevent scrolling */
     }
 
     #clock {
