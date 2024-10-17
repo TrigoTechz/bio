@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Clock (12-Hour)</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Karla', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #FFFFFF;
+      color: #37352F;
+    }
+
+    #clock {
+      text-align: center;
+    }
+
+    #time {
+      font-size: 60px;
+    }
+
+    #am-pm {
+      font-size: 20px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    #settings-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #settings-modal.active {
+      display: block;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+
+    .setting-wrapper {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div id="clock">
+    <div id="time-wrapper">
+      <div id="time"></div>
+      <div id="am-pm"></div>
+      <button id="settings-btn"><i class="fas fa-cog"></i></button>
+    </div>
+  </div>
+
+  <div id="settings-modal">
+    <div class="modal-content">
+      <span class="close-btn"><i class="fas fa-times"></i></span>
+      <div class="setting-wrapper">
+        <h3>Settings</h3>
+        <label for="background-color">Choose the Background Color:</label>
+        <select id="background-color">
+          <option value="#FFFFFF">LM Default White</option>
+          <option value="#F7F6F3">LM Off White</option>
+          <option value="#F1F1EF">LM Notion Grey</option>
+          <option value="#191919">DM Default</option>
+        </select>
+      </div>
+      <div class="setting-option">
+        <label for="font-color">Choose the Font Color:</label>
+        <select id="font-color">
+          <option value="#37352F">LM Notion Default</option>
+          <option value="#D9730D">LM Notion Orange</option>
+          <option value="#448361">LM Notion Green</option>
+          <option value="#D44C47">LM Notion Red</option>
+        </select>
+      </div>
+      <button id="save-btn">Save</button>
+    </div>
+  </div>
+
+  <script>
+    const timeElement = document.getElementById('time');
+    const amPmElement = document.getElementById('am-pm');
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeBtn = document.querySelector('.close-btn');
+    const backgroundColorSelect = document.getElementById('background-color');
+    const fontColorSelect = document.getElementById('font-color');
+    const saveBtn = document.getElementById('save-btn');
+
+    // Function to update time (12-hour format only)
+    function updateTime() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const amPm = hours >= 12 ? 'PM' : 'AM';
+
+      // Convert to 12-hour format
+      hours = hours % 12 || 12;
+
+      timeElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      amPmElement.textContent = amPm;
+    }
+
+    // Update time every second
+    setInterval(updateTime, 1000);
+    updateTime(); // Initial call to display time immediately
+
+    // Toggle settings modal
+    settingsBtn.addEventListener('click', () => {
+      settingsModal.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      settingsModal.classList.remove('active');
+    });
+
+    // Save settings
+    saveBtn.addEventListener('click', () => {
+      const selectedBgColor = backgroundColorSelect.value;
+      const selectedFontColor = fontColorSelect.value;
+      document.body.style.backgroundColor = selectedBgColor;
+      document.body.style.color = selectedFontColor;
+      settingsModal.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
