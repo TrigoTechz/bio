@@ -4,3 +4,7 @@ this page design for users of my web users so now lets make it working for all o
 
 
 contact me on telegram @Sanatani_boyz
+
+
+index page run url example  - 'https://anuragsinghyt.github.io/clock/?new=50&data=40'
+
