@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bold and Green Digital Clock</title>
+  <title>Bold Green Digital Clock</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700&display=swap">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
       font-family: 'Karla', sans-serif;
@@ -14,7 +13,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background-color: #FFFFFF;
+      background-color: #191919; /* DM Default Background */
       color: #28a745; /* Green Color */
     }
 
@@ -26,53 +25,19 @@
       font-size: 120px; /* Bigger Size */
       font-weight: bold; /* Bold Text */
       color: #28a745; /* Green Text */
+      display: inline-block;
+      position: relative;
     }
 
     #am-pm {
-      font-size: 40px; /* Larger Size for AM/PM */
+      font-size: 24px; /* Smaller Size for AM/PM */
       font-weight: bold; /* Bold Text */
       color: #28a745; /* Green Text */
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 18px;
-      cursor: pointer;
-      background-color: #28a745; /* Green background */
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    #settings-modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #f1f1f1;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    #settings-modal.active {
-      display: block;
-    }
-
-    .close-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-      color: #28a745; /* Green Close Icon */
+      right: -50px;
+      top: 20px;
     }
 
-    .setting-wrapper {
-      margin-bottom: 15px;
-    }
   </style>
 </head>
 <body>
@@ -80,41 +45,12 @@
     <div id="time-wrapper">
       <div id="time"></div>
       <div id="am-pm"></div>
-      <button id="settings-btn"><i class="fas fa-cog"></i> Settings</button>
-    </div>
-  </div>
-
-  <div id="settings-modal">
-    <div class="modal-content">
-      <span class="close-btn"><i class="fas fa-times"></i></span>
-      <div class="setting-wrapper">
-        <h3>Settings</h3>
-        <label for="background-color">Choose the Background Color:</label>
-        <select id="background-color">
-          <option value="#FFFFFF">LM Default White</option>
-          <option value="#F7F6F3">LM Off White</option>
-          <option value="#191919">DM Default</option>
-        </select>
-      </div>
-      <div class="setting-option">
-        <label for="font-color">Choose the Font Color:</label>
-        <select id="font-color">
-          <option value="#28a745">Green (Default)</option>
-        </select>
-      </div>
-      <button id="save-btn">Save</button>
     </div>
   </div>
 
   <script>
     const timeElement = document.getElementById('time');
     const amPmElement = document.getElementById('am-pm');
-    const settingsBtn = document.getElementById('settings-btn');
-    const settingsModal = document.getElementById('settings-modal');
-    const closeBtn = document.querySelector('.close-btn');
-    const backgroundColorSelect = document.getElementById('background-color');
-    const fontColorSelect = document.getElementById('font-color');
-    const saveBtn = document.getElementById('save-btn');
 
     // Function to update time (12-hour format only)
     function updateTime() {
@@ -133,22 +69,6 @@
     // Update time every second
     setInterval(updateTime, 1000);
     updateTime(); // Initial call to display time immediately
-
-    // Toggle settings modal
-    settingsBtn.addEventListener('click', () => {
-      settingsModal.classList.add('active');
-    });
-
-    closeBtn.addEventListener('click', () => {
-      settingsModal.classList.remove('active');
-    });
-
-    // Save settings
-    saveBtn.addEventListener('click', () => {
-      const selectedBgColor = backgroundColorSelect.value;
-      document.body.style.backgroundColor = selectedBgColor;
-      settingsModal.classList.remove('active');
-    });
   </script>
 </body>
 </html>
