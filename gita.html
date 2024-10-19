@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gita Query</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .response-box {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ask a Question to the Gita API</h1>
+
+    <form id="queryForm">
+        <label for="query">Enter your question:</label><br>
+        <input type="text" id="query" name="query" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="response" class="response-box"></div>
+
+    <script>
+        // Handle form submission
+        document.getElementById('queryForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get the query from the input field
+            const query = document.getElementById('query').value;
+            if (query) {
+                // Call the Gita API with the query
+                fetch(`https://trainapi.onrender.com/ask-gita?query=${encodeURIComponent(query)}`)
+                    .then(response => response.json()) // Parse the JSON response
+                    .then(data => {
+                        // Display the API response
+                        document.getElementById('response').innerHTML = `<h2>Response:</h2><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    })
+                    .catch(error => {
+                        // Display any errors
+                        document.getElementById('response').innerHTML = `<h2>Error:</h2><pre>${error.message}</pre>`;
+                    });
+            } else {
+                document.getElementById('response').innerHTML = `<h2>Error:</h2><pre>Please enter a query.</pre>`;
+            }
+        });
+    </script>
+</body>
+</html>
