@@ -26,6 +26,3 @@ Sharing is at the core of innovation. By making my projects free and open-source
 ## 🌱 What’s Next?
 
 I’m always learning and exploring new technologies. Feel free to check out my repositories, suggest improvements, or contribute to any of the projects!
-
-index page run url example  - 'https://anuragsinghyt.github.io/clock/?new=50&data=40'
-
