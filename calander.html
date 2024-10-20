@@ -12,13 +12,13 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f7f7f7;
+            background-color: #191919; /* Full background color */
         }
         .calendar {
             width: 100%;
             max-width: 600px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #000000; /* Calendar view background color set to black */
             border-radius: 10px;
             padding: 20px;
         }
@@ -26,6 +26,7 @@
             text-align: center;
             font-size: 1.5rem;
             margin-bottom: 20px;
+            color: #fff; /* White color for month and year text */
         }
         .days {
             display: grid;
@@ -38,15 +39,18 @@
             border-radius: 5px;
             font-size: 1rem;
             transition: background-color 0.3s ease;
+            color: #fff; /* White text color for days */
+            background-color: #444; /* Slightly lighter than black for visibility */
         }
         .days div:hover {
-            background-color: #e3e3e3;
+            background-color: #555; /* Darker gray on hover for visibility */
         }
         .days .today {
             color: red;
             font-weight: bold;
-            border: 2px solid red; /* Added red border */
-            border-radius: 0%;    /* Optional rounded border */
+            border: 2px solid red; /* Red border for today's date */
+            border-radius: 0%;    /* Rounded border for today's date */
+            background-color: #ff0000; /* Red background for today's date */
         }
         .days div:nth-child(7n), .days div:nth-child(7n+1) {
             color: #1E90FF; /* Highlight weekends */
@@ -57,10 +61,12 @@
             text-align: center;
             margin-bottom: 10px;
             font-weight: bold;
+            color: #fff; /* White text color for day names */
         }
         .day-names div {
             padding: 10px;
-            background-color: #f0f0f0;
+            background-color: #333; /* Dark gray background for day names */
+            color: #fff; /* White text for day names */
         }
         @media (max-width: 600px) {
             .calendar {
