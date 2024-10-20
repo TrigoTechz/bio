@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Ubuntu', sans-serif;
@@ -22,11 +23,34 @@
             border-radius: 10px;
             padding: 20px;
         }
-        .calendar h2 {
-            text-align: center;
-            font-size: 1.5rem;
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
             margin-bottom: 20px;
-            color: #fff; /* White color for month and year text */
+        }
+        .calendar-header h2 {
+            font-size: 2rem; /* Font size for the title */
+            font-family: 'Cinzel', serif; /* Stylish font for the title */
+            font-weight: 700; /* Bold font for emphasis */
+            display: flex;
+            align-items: center;
+        }
+        .calendar-header h2 span {
+            margin-left: 10px;
+            font-size: 1rem;
+            color: #ddd; /* Lighter color for the days left */
+        }
+        .calendar-header .divider {
+            border-left: 2px solid #fff;
+            height: 50px;
+            margin: 0 10px; /* Reduced margin for closer alignment */
+        }
+        .calendar-header .time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
         }
         .days {
             display: grid;
@@ -82,7 +106,11 @@
 <body>
 
 <div class="calendar">
-    <h2 id="monthYear"></h2>
+    <div class="calendar-header">
+        <h2 id="monthYear"></h2>
+        <div class="divider"></div>
+        <div class="time" id="currentTime"></div>
+    </div>
     <div class="day-names">
         <div>Sun</div>
         <div>Mon</div>
@@ -98,6 +126,7 @@
 <script>
     const calendarDays = document.getElementById('calendarDays');
     const monthYear = document.getElementById('monthYear');
+    const currentTime = document.getElementById('currentTime');
     
     const now = new Date();
     const currentYear = now.getFullYear();
@@ -113,6 +142,36 @@
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
     monthYear.textContent = `${months[currentMonth]} ${currentYear}`;
+
+    // Calculate days left in the month
+    const daysLeft = daysInMonth - currentDate;
+    const daysLeftText = document.createElement('span');
+    daysLeftText.textContent = `(${daysLeft} days left)`;
+    monthYear.appendChild(daysLeftText);
+
+    // Function to update time with 12-hour format and AM/PM
+    function updateTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // If hours is 0, set to 12 (midnight or noon)
+        
+        // Format time to display 2 digits for hours, minutes, and seconds
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        currentTime.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    // Update time every second
+    setInterval(updateTime, 1000);
+    updateTime(); // Call it immediately to display the time right away
 
     // Adding empty spaces for days before the first day of the month
     for (let i = 0; i < firstDayOfMonth; i++) {
