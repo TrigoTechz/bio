@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Calendar</title>
+    <style>
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #191919; /* Full background color */
+        }
+        .calendar {
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #191919; /* Calendar view background color set to black */
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .calendar-header h2 {
+            font-size: 1.5rem;
+            text-align: center;
+            color: #fff;
+        }
+        .calendar-header h2 span {
+            font-size: 1rem;
+            color: #ddd;
+            margin-left: 10px;
+        }
+        .calendar-header .time {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            text-align: right;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        .days div {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            color: #fff; /* White text color for days */
+            background-color: #444; /* Slightly lighter than black for visibility */
+        }
+        .days div:hover {
+            background-color: #555; /* Darker gray on hover for visibility */
+        }
+        .days .today {
+            color: red;
+            font-weight: bold;
+            border: 2px solid red; /* Red border for today's date */
+            border-radius: 0%;    /* Rounded border for today's date */
+            background-color: #ff0000; /* Red background for today's date */
+        }
+        .days div:nth-child(7n), .days div:nth-child(7n+1) {
+            color: #1E90FF; /* Highlight weekends */
+        }
+        .day-names {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #fff; /* White text color for day names */
+        }
+        .day-names div {
+            padding: 10px;
+            background-color: #333; /* Dark gray background for day names */
+            color: #fff; /* White text for day names */
+        }
+        @media (max-width: 600px) {
+            .calendar {
+                padding: 10px;
+            }
+            .calendar-header h2 {
+                font-size: 1.2rem;
+            }
+            .calendar-header .time {
+                font-size: 0.9rem;
+            }
+            .days div {
+                padding: 5px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="calendar">
+    <div class="calendar-header">
+        <h2 id="monthYear"></h2>
+        <div class="time" id="currentTime"></div>
+    </div>
+    <div class="day-names">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+    </div>
+    <div class="days" id="calendarDays"></div>
+</div>
+
+<script>
+    const calendarDays = document.getElementById('calendarDays');
+    const monthYear = document.getElementById('monthYear');
+    const currentTime = document.getElementById('currentTime');
+
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    const currentDate = now.getDate();
+
+    const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+    monthYear.textContent = `${months[currentMonth]} ${currentYear}`;
+
+    // Calculate days left in the month
+    const daysLeft = daysInMonth - currentDate;
+    const daysLeftText = document.createElement('span');
+    daysLeftText.textContent = `(${daysLeft} days left)`;
+    monthYear.appendChild(daysLeftText);
+
+    // Function to update time with 12-hour format and AM/PM
+    function updateTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+
+        // Convert to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // If hours is 0, set to 12 (midnight or noon)
+
+        // Format time to display 2 digits for hours, minutes, and seconds
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        currentTime.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    // Update time every second
+    setInterval(updateTime, 1000);
+    updateTime(); // Call it immediately to display the time right away
+
+    // Adding empty spaces for days before the first day of the month
+    for (let i = 0; i < firstDayOfMonth; i++) {
+        const emptyDiv = document.createElement('div');
+        calendarDays.appendChild(emptyDiv);
+    }
+
+    // Populate days in the calendar
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.textContent = day;
+
+        // Highlight today's date with bold, red text, and a red border
+        if (day === currentDate) {
+            dayDiv.classList.add('today');
+        }
+
+        calendarDays.appendChild(dayDiv);
+    }
+</script>
+
+</body>
+</html>
