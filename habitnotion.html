@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Ubuntu', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #191919;
+        }
+        .calendar {
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #191919;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .calendar-header h2 {
+            font-size: 2rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        .calendar-header h2 span {
+            margin-left: 10px;
+            font-size: 1rem;
+            color: #ddd;
+        }
+        .calendar-header .divider {
+            border-left: 2px solid #fff;
+            height: 50px;
+            margin: 0 10px;
+        }
+        .calendar-header .time {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        .days div {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            color: #fff;
+            background-color: #444;
+            cursor: pointer;
+        }
+        .days div:hover {
+            background-color: #555;
+        }
+        .days .today {
+            color: red;
+            font-weight: bold;
+            border: 2px solid red;
+            border-radius: 0%;
+            background-color: #ff0000;
+        }
+        .days div:nth-child(7n), .days div:nth-child(7n+1) {
+            color: #1E90FF;
+        }
+        .day-names {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .day-names div {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+        }
+        @media (max-width: 600px) {
+            .calendar {
+                padding: 10px;
+            }
+            .days div {
+                padding: 5px;
+                font-size: 0.9rem;
+            }
+            .calendar-header h2 {
+                font-size: 1.5rem;
+            }
+            .calendar-header .time {
+                font-size: 1rem;
+            }
+            .popup {
+                width: 50%;
+                padding: 5px;
+            }
+            .popup button {
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+            }
+        }
+        .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+    z-index: 10;
+    width: 250px; /* Change this value to set the desired popup width */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup button {
+    margin: 0; /* Remove margins */
+    padding: 10px;
+    font-size: 1rem;
+    width: 80px; /* Set a fixed width for the buttons */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block; /* Ensure buttons are inline */
+
+        }
+        .popup .done {
+            background-color: green;
+            color: white;
+        }
+        .popup .fail {
+            background-color: red;
+            color: white;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 9;
+        }
+        .arrows {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .arrows button {
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calendar">
+    <div class="arrows">
+        <button id="prevMonth">&lt;</button>
+        <button id="nextMonth">&gt;</button>
+    </div>
+    <div class="calendar-header">
+        <h2 id="monthYear"></h2>
+        <div class="divider"></div>
+        <div class="time" id="currentTime"></div>
+    </div>
+    <div class="day-names">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+    </div>
+    <div class="days" id="calendarDays"></div>
+</div>
+
+<div class="popup" id="popup">
+    <button class="done" id="markDone">✔ Done</button>
+    <button class="fail" id="markFail">✖ Fail</button>
+    <button class="reset" id="resetDay">⌦Reset</button>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<script>
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
+    const calendarDays = document.getElementById('calendarDays');
+    const monthYear = document.getElementById('monthYear');
+    const currentTime = document.getElementById('currentTime');
+    const popup = document.getElementById('popup');
+    const overlay = document.getElementById('overlay');
+    let selectedDay;
+
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    function renderCalendar() {
+        calendarDays.innerHTML = '';
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const today = new Date().getDate();
+
+        // Display month and year, including days left only in the current month
+        const daysLeft = currentMonth === new Date().getMonth() ? daysInMonth - today : 0;
+        monthYear.innerHTML = `${months[currentMonth]} ${currentYear} <span>(${daysLeft} days left)</span>`;
+        
+        // Fill in blank spaces before the first day
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            const emptyDiv = document.createElement('div');
+            calendarDays.appendChild(emptyDiv);
+        }
+
+        // Populate days with click functionality
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.textContent = day;
+            dayDiv.addEventListener('click', () => showPopup(day));
+            
+            const dayStatus = localStorage.getItem(`${currentYear}-${currentMonth}-${day}`);
+            if (dayStatus) {
+                dayDiv.style.backgroundColor = dayStatus === 'done' ? 'green' : 'red';
+                dayDiv.textContent += dayStatus === 'done' ? ' ✔' : ' ✖';
+            }
+
+            if (day === today && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear()) {
+                dayDiv.classList.add('today');
+            }
+
+            calendarDays.appendChild(dayDiv);
+        }
+    }
+
+    function showPopup(day) {
+        selectedDay = day;
+        popup.style.display = 'block';
+        overlay.style.display = 'block';
+    }
+
+    function closePopup() {
+        popup.style.display = 'none';
+        overlay.style.display = 'none';
+    }
+
+    document.getElementById('markDone').addEventListener('click', () => {
+        localStorage.setItem(`${currentYear}-${currentMonth}-${selectedDay}`, 'done');
+        closePopup();
+        renderCalendar();
+    });
+
+    document.getElementById('markFail').addEventListener('click', () => {
+        localStorage.setItem(`${currentYear}-${currentMonth}-${selectedDay}`, 'fail'); closePopup(); renderCalendar(); });
+
+
+
+
+document.getElementById('resetDay').addEventListener('click', () => {
+    localStorage.removeItem(`${currentYear}-${currentMonth}-${selectedDay}`);
+    closePopup();
+    renderCalendar();
+});
+
+document.getElementById('overlay').addEventListener('click', closePopup);
+
+document.getElementById('prevMonth').addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    renderCalendar();
+});
+
+document.getElementById('nextMonth').addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    renderCalendar();
+});
+
+function updateTime() {
+    const now = new Date();
+    currentTime.textContent = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+}
+
+setInterval(updateTime, 1000);
+renderCalendar();
+</script> </body> </html>
