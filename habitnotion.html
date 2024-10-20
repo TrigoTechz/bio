@@ -307,8 +307,19 @@ document.getElementById('nextMonth').addEventListener('click', () => {
 
 function updateTime() {
     const now = new Date();
-    currentTime.textContent = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    // Convert to 12-hour format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // If hours = 0, change it to 12
+    minutes = minutes < 10 ? '0' + minutes : minutes; // Add leading zero if minutes < 10
+
+    // Update the current time with AM/PM
+    currentTime.textContent = `${hours}:${minutes} ${ampm}`;
 }
+
 
 setInterval(updateTime, 1000);
 renderCalendar();
