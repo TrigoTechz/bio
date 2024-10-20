@@ -19,7 +19,7 @@ Sharing is at the core of innovation. By making my projects free and open-source
 
 ## 📈 Skills
 
-- **Languages:** JavaScript, Python, HTML/CSS, SQL, and more.
+- **Languages:** JavaScript, PHP, HTML/CSS, SQL, and more.
 - **Frameworks:** React, Node.js, Django.
 - **Tools:** Git, Docker, VS Code, CI/CD.
 
