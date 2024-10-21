@@ -25,29 +25,28 @@
             position: relative;
         }
         .calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 4px solid #00ffcc; /* Colorful border */
-    border-radius: 10px;
-    background-color: #2a2a2a; /* Dim background color */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    transition: border-width 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 4px solid #00ffcc; /* Colorful border */
+            border-radius: 10px;
+            background-color: #2a2a2a; /* Dim background color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            transition: border-width 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+        }
 
-@media (max-width: 600px) {
-    .calendar-header {
-        padding: 8px;
-        border-width: 2px;
-        border-radius: 8px;
-        background-color: #2a2a2a; /* Keep the dim background for smaller screens */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Lighter shadow on smaller screens */
-    }
-}
-
+        @media (max-width: 600px) {
+            .calendar-header {
+                padding: 8px;
+                border-width: 2px;
+                border-radius: 8px;
+                background-color: #2a2a2a; /* Keep the dim background for smaller screens */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Lighter shadow on smaller screens */
+            }
+        }
 
         .calendar-header h2 {
             font-size: 2rem;
@@ -94,7 +93,6 @@
             font-weight: bold;
             border: 2px solid rgb(0, 174, 255);
             border-radius: 0%;
-            
         }
         .days div:nth-child(7n), .days div:nth-child(7n+1) {
             color: #ffffff;
@@ -202,7 +200,6 @@
 </div>
 
 <div class="popup" id="popup">
-    
     <button class="done" id="markDone">✔ Done</button>
     <button class="fail" id="markFail">✖ Fail</button>
     <button class="reset" id="resetDay">🔄 Reset</button>
@@ -227,10 +224,10 @@
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const today = new Date().getDate();
 
-        // Display month and year, including days left only for the current month
-        const daysLeft = currentMonth === new Date().getMonth() ? daysInMonth - today : '';
-        monthYear.innerHTML = `${months[currentMonth]} ${currentYear} </span>`;
-        
+        // Display today's date before month and year
+        const todayDate = new Date().getDate();
+        monthYear.innerHTML = `${todayDate} ${months[currentMonth]} ${currentYear}`;
+
         // Fill in blank spaces before first day
         for (let i = 0; i < firstDayOfMonth; i++) {
             const emptyDiv = document.createElement('div');
@@ -242,7 +239,7 @@
             const dayDiv = document.createElement('div');
             dayDiv.textContent = day;
             dayDiv.addEventListener('click', () => showPopup(day));
-            
+
             const dayStatus = localStorage.getItem(`${currentYear}-${currentMonth}-${day}`);
             if (dayStatus) {
                 dayDiv.style.backgroundColor = dayStatus === 'done' ? 'green' : 'red';
@@ -288,33 +285,36 @@
 
     overlay.addEventListener('click', closePopup);
 
+    function updateTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12; // Convert to 12-hour format
+        currentTime.textContent = `${hours}:${minutes} ${ampm}`;
+    }
+
     document.getElementById('prevMonth').addEventListener('click', () => {
-        if (currentMonth === 0) {
+        currentMonth--;
+        if (currentMonth < 0) {
             currentMonth = 11;
             currentYear--;
-        } else {
-            currentMonth--;
         }
         renderCalendar();
     });
 
     document.getElementById('nextMonth').addEventListener('click', () => {
-        if (currentMonth === 11) {
+        currentMonth++;
+        if (currentMonth > 11) {
             currentMonth = 0;
             currentYear++;
-        } else {
-            currentMonth++;
         }
         renderCalendar();
     });
 
-    function updateTime() {
-        const now = new Date();
-        currentTime.innerText = now.toLocaleTimeString();
-    }
-
     setInterval(updateTime, 1000);
     renderCalendar();
+    updateTime();
 </script>
 
 </body>
