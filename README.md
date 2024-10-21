@@ -9,6 +9,7 @@ I work on a variety of projects, including but not limited to:
 - **Automation Scripts:** Simplifying repetitive tasks.
 - **Open Source Libraries:** Tools to help fellow developers.
 - **Fun Projects:** Just for experimenting and learning new tech.
+- **Notion Templates** https://brook-board-dbd.notion.site/R-F-SSC-80eb084ee7cb422e9beddfb3c8ad6b64?pvs=74 .
 
 ## 💡 Why Open Source?
 
