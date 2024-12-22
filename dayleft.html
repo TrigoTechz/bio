@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Days Left Widget</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Lexend', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #191919;
+            color: #ffffff;
+        }
+        .widget {
+            text-align: center;
+            background: #252525;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            position: relative;
+        }
+        .widget input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            width: calc(100% - 22px);
+            background-color: #333;
+            color: #fff;
+        }
+        .widget p {
+            margin-top: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .reset-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            background-color: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 16px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="widget">
+        <div class="reset-icon" id="resetButton">&#x2715;</div>
+        <input type="date" id="finalDate" style="display: none;" />
+        <p id="countdown">Select a date to start</p>
+    </div>
+
+    <script>
+        const finalDateInput = document.getElementById('finalDate');
+        const countdownDisplay = document.getElementById('countdown');
+        const resetButton = document.getElementById('resetButton');
+
+        function saveDateToLocalStorage(date) {
+            localStorage.setItem('finalDate', date);
+        }
+
+        function getSavedDateFromLocalStorage() {
+            return localStorage.getItem('finalDate');
+        }
+
+        function clearLocalStorage() {
+            localStorage.removeItem('finalDate');
+        }
+
+        function updateCountdown() {
+            const savedDate = getSavedDateFromLocalStorage();
+            if (savedDate) {
+                const finalDate = new Date(savedDate);
+                const today = new Date();
+
+                const timeDifference = finalDate - today;
+                const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                if (daysLeft > 0) {
+                    countdownDisplay.textContent = `${daysLeft} Days Left`;
+                } else if (daysLeft === 0) {
+                    countdownDisplay.textContent = "Today is the final day!";
+                } else {
+                    countdownDisplay.textContent = "The selected date has passed.";
+                }
+
+                finalDateInput.style.display = "none";
+            } else {
+                finalDateInput.style.display = "block";
+                countdownDisplay.textContent = "Select a date to start";
+            }
+        }
+
+        finalDateInput.addEventListener('change', () => {
+            const selectedDate = finalDateInput.value;
+            saveDateToLocalStorage(selectedDate);
+            updateCountdown();
+        });
+
+        resetButton.addEventListener('click', () => {
+            clearLocalStorage();
+            updateCountdown();
+        });
+
+        // Initialize the widget
+        window.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+        });
+    </script>
+</body>
+</html>
