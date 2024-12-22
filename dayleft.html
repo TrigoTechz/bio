@@ -55,11 +55,16 @@
             color: white;
             font-size: 16px;
             line-height: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .widget.days-left:hover .reset-icon {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <div class="widget">
+    <div class="widget" id="widget">
         <div class="reset-icon" id="resetButton">&#x2715;</div>
         <input type="date" id="finalDate" style="display: none;" />
         <p id="countdown">Select a date to start</p>
@@ -69,6 +74,7 @@
         const finalDateInput = document.getElementById('finalDate');
         const countdownDisplay = document.getElementById('countdown');
         const resetButton = document.getElementById('resetButton');
+        const widget = document.getElementById('widget');
 
         function saveDateToLocalStorage(date) {
             localStorage.setItem('finalDate', date);
@@ -100,9 +106,11 @@
                 }
 
                 finalDateInput.style.display = "none";
+                widget.classList.add('days-left');
             } else {
                 finalDateInput.style.display = "block";
                 countdownDisplay.textContent = "Select a date to start";
+                widget.classList.remove('days-left');
             }
         }
 
