@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Progress Widget</title>
+    <style>
+        body {
+            background-color: #191919; /* Notion Dark Mode Background */
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .bar-wrapper {
+            flex-grow: 1;
+            border: 1px solid #ffffff;
+            border-radius: 6px;
+            height: 24px;
+            overflow: hidden;
+            background: transparent;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #e3e3e3;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        .label {
+            font-size: 14px;
+            font-weight: 500;
+            min-width: 90px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-container">
+        <div class="bar-wrapper">
+            <div id="year-bar" class="progress-fill"></div>
+        </div>
+        <div id="year-text" class="label">Year: 0%</div>
+    </div>
+
+    <div class="progress-container">
+        <div class="bar-wrapper">
+            <div id="month-bar" class="progress-fill"></div>
+        </div>
+        <div id="month-text" class="label">Month: 0%</div>
+    </div>
+
+    <script>
+        function updateProgress() {
+            const now = new Date();
+            
+            // Year progress
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+            const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+            
+            document.getElementById('year-bar').style.width = `${yearProgress}%`;
+            document.getElementById('year-text').innerText = `Year: ${Math.round(yearProgress)}%`;
+
+            // Month progress
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            const monthProgress = ((now - startOfMonth) / (endOfMonth - startOfMonth)) * 100;
+
+            document.getElementById('month-bar').style.width = `${monthProgress}%`;
+            document.getElementById('month-text').innerText = `Month: ${Math.round(monthProgress)}%`;
+        }
+
+        updateProgress();
+        // Refresh every hour
+        setInterval(updateProgress, 3600000);
+    </script>
+</body>
+</html>

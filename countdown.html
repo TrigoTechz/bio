@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Countdown Widget</title>
+    <style>
+        body {
+            background-color: #191919;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .countdown {
+            font-size: 16px;
+            color: #d1d1d1;
+            font-family: Courier, monospace; /* Matches the code/serif vibe in your image */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="title" id="widget-title">2026 - LEFT</div>
+    <div class="countdown" id="countdown-timer">00d 00h</div>
+
+    <script>
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            // Set target to midnight of Dec 31st of the current year
+            const targetDate = new Date(currentYear, 11, 31, 23, 59, 59);
+            
+            document.getElementById('widget-title').innerText = `${currentYear} - LEFT`;
+
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+                document.getElementById('countdown-timer').innerText = "Year Ended!";
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            document.getElementById('countdown-timer').innerText = `${days}d ${hours}h`;
+        }
+
+        updateCountdown();
+        // Update every minute to keep hours accurate
+        setInterval(updateCountdown, 60000);
+    </script>
+</body>
+</html>
